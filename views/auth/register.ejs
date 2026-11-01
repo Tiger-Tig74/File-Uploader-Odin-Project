@@ -1,0 +1,30 @@
+<% layout('layout', {
+     title: "Register - File Uploader",
+     bodyClass: "auth-page",
+     mainClass: "auth-wrap"
+   }) %>
+
+<section class="card">
+  <h1>Create account</h1>
+
+<% if (errors && errors.length) { %>
+    <ul class="errors">
+<% errors.forEach(e => { %><li><%= e.msg %></li><% }) %>
+    </ul>
+<% } %>
+
+  <form action="/auth/register" method="POST" class="stack">
+    <label>Email
+      <input type="email" name="email" value="<%= values?.email || '' %>" required />
+    </label>
+    <label>Password (min 8 chars)
+      <input type="password" name="password" required minlength="8" />
+    </label>
+    <label>Confirm password
+      <input type="password" name="confirmPassword" required minlength="8" />
+    </label>
+    <button type="submit">Create account</button>
+  </form>
+
+  <p class="muted">Already have an account? <a href="/auth/login">Sign in</a></p>
+</section>

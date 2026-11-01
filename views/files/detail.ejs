@@ -1,0 +1,20 @@
+<% layout('layout', { title: file.name + " - File Uploader" }) %>
+
+<p><a href="<%= file.folderId ? '/folders/' + file.folderId : '/folders' %>">&larr; Back</a></p>
+
+<section class="card">
+  <h1>📄<%= file.name %></h1>
+  <dl class="kv">
+    <dt>Size</dt><dd><%= prettySize %> (<%= file.size %> bytes)</dd>
+    <dt>Type</dt><dd><%= file.mimeType %></dd>
+    <dt>Uploaded</dt><dd><%= new Date(file.uploadedAt).toLocaleString() %></dd>
+    <dt>Folder</dt><dd><%= file.folder ? file.folder.name : "Root" %></dd>
+  </dl>
+  <div class="actions">
+    <a class="btn" href="/files/<%= file.id %>/download">Download</a>
+    <form action="/files/<%= file.id %>/delete" method="POST"
+          data-confirm="Delete this file?">
+      <button class="danger" type="submit">Delete</button>
+    </form>
+  </div>
+</section>

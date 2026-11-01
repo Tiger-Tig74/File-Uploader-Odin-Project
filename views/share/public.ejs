@@ -1,0 +1,32 @@
+<% layout('layout', { title: folder.name + " - Shared" }) %>
+
+<section class="card">
+  <h1>📁<%= folder.name %></h1>
+  <p class="muted">
+    Shared by <%= folder.owner.email %> - expires
+<%= new Date(share.expiresAt).toLocaleString() %>
+  </p>
+
+  <h2>Files</h2>
+<% if (!folder.files.length) { %>
+    <p class="muted">No files.</p>
+<% } else { %>
+    <ul class="list">
+<% folder.files.forEach(f => { %>
+        <li>
+          📄<%= f.name %>
+          <span class="muted">(<%= (f.size / 1024).toFixed(1) %> KB)</span>
+          <a class="link-btn"
+             href="/share/<%= share.token %>/file/<%= f.id %>/download">Download</a>
+        </li>
+<% }) %>
+    </ul>
+<% } %>
+
+<% if (folder.children.length) { %>
+    <h2>Subfolders</h2>
+    <ul class="list">
+<% folder.children.forEach(c => { %><li>📁<%= c.name %></li><% }) %>
+    </ul>
+<% } %>
+</section>

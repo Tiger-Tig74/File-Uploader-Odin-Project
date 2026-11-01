@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title><%= typeof title !== "undefined" ? title : "File Uploader" %></title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body class="<%= typeof bodyClass !== "undefined" ? bodyClass : "" %>">
+
+<% if (typeof currentUser !== "undefined" && currentUser) { %>
+    <nav class="topbar">
+      <a href="/" class="brand">File Uploader</a>
+      <div class="topbar-right">
+        <a href="/">Home</a>
+        <a href="/folders">Folders</a>
+        <span class="who">Signed in as <strong><%= currentUser.email %></strong></span>
+        <form action="/auth/logout" method="POST">
+          <button type="submit">Log out</button>
+        </form>
+      </div>
+    </nav>
+<% } %>
+
+  <main class="<%= typeof mainClass !== "undefined" ? mainClass : "container" %>">
+<% if (typeof success !== "undefined" && success.length) { %>
+      <div class="flash success" data-autodismiss><%= success %></div>
+<% } %>
+<% if (typeof error !== "undefined" && error.length) { %>
+      <div class="flash error" data-autodismiss><%= error %></div>
+<% } %>
+
+<%- body %>
+  </main>
+
+  <script src="/js/main.js" defer></script>
+</body>
+</html>

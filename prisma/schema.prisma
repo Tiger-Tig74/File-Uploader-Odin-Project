@@ -1,0 +1,62 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model User {
+    id        String    @id @default(uuid())
+    email     String    @unique
+    password  String
+    folders   Folder[]
+    files     File[]
+    sessions  Session[]
+    createdAt DateTime  @default(now())
+}
+
+model Folder {
+    id        String   @id @default(uuid())
+    name      String
+    ownerId   String
+    owner     User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+    parentId  String?
+    parent    Folder?  @relation("FolderTree", fields: [parentId], references: [id])
+    children  Folder[] @relation("FolderTree")
+    files     File[]
+    shares    Share[]
+    createdAt DateTime @default(now())
+}
+
+model File {
+    id         String   @id @default(uuid())
+    name       String
+    size       Int
+    mimeType   String
+    url        String
+    folderId   String?
+    folder     Folder?  @relation(fields: [folderId], references: [id], onDelete: Cascade)
+    ownerId    String
+    owner      User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+    uploadedAt DateTime @default(now())
+}
+
+model Share {
+    id        String   @id @default(uuid())
+    token     String   @unique
+    folderId  String
+    folder    Folder   @relation(fields: [folderId], references: [id], onDelete: Cascade)
+    expiresAt DateTime
+    createdAt DateTime @default(now())
+}
+
+model Session {
+    id        String   @id
+    sid       String   @unique
+    data      String
+    expiresAt DateTime
+    user      User?    @relation(fields: [userId], references: [id])
+    userId    String?
+}

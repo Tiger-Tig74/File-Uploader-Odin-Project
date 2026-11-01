@@ -1,0 +1,58 @@
+<% layout('layout', { title: "Dashboard - File Uploader" }) %>
+
+<section class="hero card">
+  <h1>Welcome back!</h1>
+  <p class="muted">
+    You have <strong><%= counts.folders %></strong> folder(s) and
+    <strong><%= counts.files %></strong> file(s) stored.
+  </p>
+</section>
+
+<div class="dash-grid">
+  <section class="card">
+    <h2>Quick create</h2>
+    <form action="/folders" method="POST" class="inline-form">
+      <input type="text" name="name" placeholder="New folder name" required maxlength="100" />
+      <button type="submit">Create folder</button>
+    </form>
+
+    <form action="/files" method="POST" enctype="multipart/form-data" class="inline-form">
+      <input type="file" name="file" required />
+      <button type="submit">Upload file</button>
+    </form>
+  </section>
+
+  <section class="card">
+    <h2>Recent uploads</h2>
+<% if (!recentFiles.length) { %>
+      <p class="muted">Nothing uploaded yet.</p>
+<% } else { %>
+      <ul class="list">
+<% recentFiles.forEach(f => { %>
+          <li>
+            <a href="/files/<%= f.id %>">📄<%= f.name %></a>
+            <span class="muted">
+<%= (f.size / 1024).toFixed(1) %> KB ·
+<%= new Date(f.uploadedAt).toLocaleDateString() %>
+            </span>
+          </li>
+<% }) %>
+      </ul>
+<% } %>
+  </section>
+
+  <section class="card">
+    <h2>Your folders</h2>
+<% if (!folders.length) { %>
+      <p class="muted">No folders yet.</p>
+<% } else { %>
+      <ul class="grid">
+<% folders.forEach(f => { %>
+          <li class="card">
+            <a href="/folders/<%= f.id %>">📁<%= f.name %></a>
+          </li>
+<% }) %>
+      </ul>
+<% } %>
+  </section>
+</div>
